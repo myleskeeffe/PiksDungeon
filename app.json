@@ -1,7 +1,7 @@
 {
-  "name": "EvoBot",
-  "description": "🤖 Discord Music Bot built with discord.js",
-  "repository": "https://github.com/eritislami/evobot",
+  "name": "Piks Dungeon",
+  "description": "Discord Music & Moderation Bot | Forked from Evobot",
+  "repository": "github.com/myleskeeffe/PiksDungeon",
   "logo": "https://i.imgur.com/JFxgbWH.png",
-  "keywords": ["discord", "discordjs", "music", "bot"]
+  "keywords": ["discord", "discordjs", "music", "bot", "moderation"]
 }
