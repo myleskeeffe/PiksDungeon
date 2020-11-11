@@ -4,6 +4,17 @@
 const { Client, Collection } = require("discord.js");
 const { readdirSync } = require("fs");
 const { join } = require("path");
+const { db } = require("./util/db");
+
+// process.on('exit', () => {
+//   db.close();
+//   console.log("Database Closing...");
+// });
+
+process.on('SIGINT', () => {
+  db.close();
+  console.log("Database Closing...");
+});
 
 let TOKEN, PREFIX;
 try {
@@ -90,3 +101,4 @@ client.on("message", async (message) => {
     message.reply("There was an error executing that command.").catch(console.error);
   }
 });
+
