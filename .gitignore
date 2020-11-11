@@ -2,6 +2,9 @@
 /.idea
 /.vscode
 
+# Database
+dungeon-db/
+
 # Logs
 logs
 *.log
