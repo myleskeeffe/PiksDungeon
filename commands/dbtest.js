@@ -1,4 +1,3 @@
-const { canModifyQueue } = require("../util/EvobotUtil");
 const { db } = require("../util/db");
 
 module.exports = {
