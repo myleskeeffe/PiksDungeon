@@ -78,7 +78,39 @@ module.exports = {
             }
         }
         else if (message.mentions.members.first()) {
-            // Vote Kick User
+            async function voteKick() {
+                let serverId = await message.guild.id;
+                let keyId = serverId + '.' + 'voteKickT2' + '.' + message.mentions.members.first().id;
+                try {
+                    let votes = await db.get(keyId);
+                    if (votes) {
+                        let voteArray = await JSON.parse(votes);
+                        if (voteArray.includes(message.author.id)) {
+                            message.reply("Hey no double dipping!");
+                        }
+                        else {
+                            voteArray.push(message.author.id);
+                            let voteArrayJSON = await JSON.stringify(voteArray);
+                            await db.put(keyId, voteArrayJSON)
+                            message.reply("Adding Vote to " + message.mentions.members.first().toString() + "'s Vote Kick (" + voteArray.length() + "/5)");
+                            if (voteArray.length() >= db.get(serverId + 'settings' + '.' + 'vkMinVotes')) {
+                                message.reply("Vote Kick for " + message.mentioned.members.first().toString() + " Succeeded")
+                            }
+                        }
+                    }
+                }
+                catch(err) {
+                    if (err.notFound) {
+                        // Couldn't find a Key for User - Initiate Vote Kick
+                        message.channel.send("Vote Kick For: " + message.mentions.members.first().toString() + " Started by: " + message.author.toString() + "\n.vk " + message.mentions.members.first().toString() + " to vote yes. (1/5)")
+                        let voteArray = [];
+                        await voteArray.push(message.author.id);
+                        let voteArrayJSON = await JSON.stringify(voteArray);
+                        await db.put(keyId, voteArrayJSON);
+                    }
+                }
+            }
+            voteKick();
         }
         else {
             message.reply("I didn't get that. Please check .vk help")
