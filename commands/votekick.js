@@ -25,7 +25,7 @@ module.exports = {
             helpEmbed.addField('**.vk config set minvotes <num>**', 'Set minimum number of votes for VoteKick to succeed.', true)
             helpEmbed.addField('**.vk config get minvotes**', 'See minimum number of votes for VoteKick to succeed.', true)
 
-            message.channel.send(helpEmbed).catch(console.error);
+            return (message.channel.send(helpEmbed).catch(console.error));
         }
         else if (args[0].toLowerCase() == "config") {
             // Allows for Setting Config Values - Check if Set is Second Arg
@@ -130,7 +130,7 @@ module.exports = {
                         let voteArray = await JSON.parse(votes);
                         // If the current author is already in the votearray, they've voted so reject.
                         if (voteArray.includes(message.author.id)) {
-                            message.reply("Hey no double dipping!");
+                            return (message.reply("Hey no double dipping!"));
                         }
                         // Else this is a new voter; so add their id to the vote array
                         else {
@@ -148,12 +148,14 @@ module.exports = {
                                 // Delete user's vote key.
                                 await db.del(keyId);
                                 if (!TEST_MODE) {
-                                    await message.mentioned.members.first().kick("Kicked via Successful Vote Kick. Users who voted: " + voteArray)
+                                    await message.mentioned.members.first().kick("Kicked via Successful Vote Kick. Users who voted: " + voteArray);
+                                    return;
                                 }
                                 else {
-                                    message.channel.send("BOT IS IN TEST MODE. " + message.mentioned.members.first().toString() + " WOULDVE HAVE JUST BEEN KICKED.")
+                                    return (message.channel.send("BOT IS IN TEST MODE. " + message.mentioned.members.first().toString() + " WOULDVE HAVE JUST BEEN KICKED."));
                                 }
                             }
+                            return;
                         }
                     }
                 }
@@ -168,6 +170,7 @@ module.exports = {
                         // Serialise and add to database
                         let voteArrayJSON = await JSON.stringify(voteArray);
                         await db.put(keyId, voteArrayJSON);
+                        return;
                         // Start a timer and then recheck if user has been kicked or not - if not reset user.
                         // setTimeout(function () {
                         //     async function checkVotes() {
@@ -197,7 +200,7 @@ module.exports = {
         }
         // If all else fails; throw a helpful error.
         else {
-            message.reply("I didn't get that. Please check .vk help")
+            return (message.reply("I didn't get that. Please check .vk help"))
         }
     }
 };
