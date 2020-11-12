@@ -61,7 +61,7 @@ module.exports = {
                                 return (message.reply("An error occured while running that. Check you entered a valid number."))
                             }
                             let serverId = await message.guild.id;
-                            let keyId = serverId + '.' + '.settings.vkMinVotes';
+                            let keyId = serverId + '.settings.vkMinVotes';
                             await db.put(keyId, args[3]);
                             message.reply("Succesfully set min votes to: " + args[3]);
                         }
