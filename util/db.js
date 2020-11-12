@@ -1,4 +1,4 @@
-var level = require('level')
+var level = require('level-party')
 var db = level('dungeon-db')
 
 

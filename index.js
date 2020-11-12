@@ -11,10 +11,10 @@ const { db } = require("./util/db");
 //   console.log("Database Closing...");
 // });
 
-process.on('SIGINT', () => {
-  db.close();
-  console.log("Database Closing...");
-});
+// process.on('SIGINT', () => {
+//   db.close();
+//   console.log("Database Closing...");
+// });
 
 let TOKEN, PREFIX;
 try {
