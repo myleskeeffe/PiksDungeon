@@ -115,6 +115,7 @@ module.exports = {
         // Otherwise, if it doesn't match anything else, check if there's a user mention somewhere - if so we are trying to kick that user
         else if (message.mentions.members.first()) {
             async function voteKick() {
+                console.log(message.guild.member(message.author).displayName + " tried to votekick.")
                 // Initialise variables
                 // Vote Array is a list of all users who voted for a user - we count the number of users in it to get total votes
                 let serverId = await message.guild.id;
@@ -126,37 +127,52 @@ module.exports = {
                     let votes = await db.get(keyId);
                     // Just in case, check that votes **does** exist
                     if (votes) {
+                        console.log("Vote Array: " + votes)
                         // Deserialise the JSON back into javascript object format
                         let voteArray = await JSON.parse(votes);
+                        console.log("Parsed VA: " + voteArray)
                         // If the current author is already in the votearray, they've voted so reject.
                         if (voteArray.includes(message.author.id)) {
                             return (message.reply("Hey no double dipping!"));
                         }
                         // Else this is a new voter; so add their id to the vote array
-                        else {
-                            // Add author.id to the voteArray
-                            voteArray.push(message.author.id);
-                            // Serialise Vote Array
-                            let voteArrayJSON = await JSON.stringify(voteArray);
-                            // Push vote array into the database
-                            await db.put(keyId, voteArrayJSON)
-                            // Respond back to user
-                            message.reply("Adding Vote to " + message.mentions.members.first().toString() + "'s Vote Kick (" + voteArray.length() + "/" + await db.get(serverId + '.settings.vkMinVotes') + ")");
-                            // Check if voteArray length is larger or equal to min votes, if it is the vote kick is successful.
-                            if (voteArray.length() >= await db.get(serverId + '.settings.vkMinVotes')) {
-                                message.reply("Vote Kick for " + message.mentioned.members.first().toString() + " Succeeded");
-                                // Delete user's vote key.
-                                await db.del(keyId);
-                                if (!TEST_MODE) {
-                                    await message.mentioned.members.first().kick("Kicked via Successful Vote Kick. Users who voted: " + voteArray);
-                                    return;
-                                }
-                                else {
-                                    return (message.channel.send("BOT IS IN TEST MODE. " + message.mentioned.members.first().toString() + " WOULDVE HAVE JUST BEEN KICKED."));
-                                }
-                            }
-                            return;
+
+                        console.log("Voter Passed Check - Adding:");
+
+                        // Add author.id to the voteArray
+                        voteArray.push(message.author.id);
+
+                        console.log("Success Added.")
+                        // Serialise Vote Array
+                        let voteArrayJSON = JSON.stringify(voteArray);
+                        // Push vote array into the database
+                        try {
+                            await db.put(keyId, voteArrayJSON);
+                            console.log("Put in DB")
                         }
+                        catch(error) {
+                            console.log(error);
+                        }
+                        let minVotesStats = await db.get(serverId + '.settings.vkMinVotes')
+                        console.log('Responding in chat.')
+                        // Respond back to user
+                        message.channel.send("Adding Vote to " + message.mentions.members.first().toString() + "'s Vote Kick (" + voteArray.length + "/" + minVotesStats +")");
+                        // Check if voteArray length is larger or equal to min votes, if it is the vote kick is successful.
+                        if (voteArray.length >= minVotesStats) {
+                            message.channel.send("Vote Kick for " + message.mentions.members.first().toString() + " Succeeded");
+                            // Delete user's vote key.
+                            await db.del(keyId);
+                            if (!TEST_MODE) {
+                                await message.mentioned.members.first().kick("Kicked via Successful Vote Kick. Users who voted: " + voteArray);
+                                return;
+                            }
+                            else {
+                                console.log("Would Kick")
+                                message.channel.send("BOT IS IN TEST MODE. " + message.mentions.members.first().toString() + " WOULDVE HAVE JUST BEEN KICKED.");
+                            }
+                        }
+                        return;
+
                     }
                 }
                 catch (err) {
@@ -170,29 +186,36 @@ module.exports = {
                         // Serialise and add to database
                         let voteArrayJSON = await JSON.stringify(voteArray);
                         await db.put(keyId, voteArrayJSON);
-                        return;
+                        
                         // Start a timer and then recheck if user has been kicked or not - if not reset user.
-                        // setTimeout(function () {
-                        //     async function checkVotes() {
-                        //         try {
+                        setTimeout(function () {
+                            async function checkVotes() {
+                                try {
 
-                        //             // User Votekick still exits, expire it
-                        //             let votes = await db.get(keyId);
-                        //             if (votes) {
-                        //                 db.del(keyId);
-                        //                 message.channel.send("Vote Kick For: " + message.mentions.members.first().toString() + " expired. (120s)");
-                        //             }
+                                    // User Votekick still exits, expire it
+                                    let votes = await db.get(keyId);
+                                    if (votes) {
+                                        db.del(keyId);
+                                        message.channel.send("Vote Kick For: " + message.mentions.members.first().toString() + " expired. (120s)");
+                                    }
 
 
-                        //         }
-                        //         catch (err) {
-                        //             if (err.notFound) {
+                                }
+                                catch (err) {
+                                    if (err.notFound) {
 
-                        //             }
-                        //         }
-                        //     }
-                        //     checkVotes();
-                        // }, 60000);
+                                    }
+                                    else {
+                                        console.log(error);
+                                    }
+                                    
+                                }
+                            }
+                            checkVotes();
+                        }, 60000);
+                    }
+                    else {
+                        console.log(err);
                     }
                 }
             }
