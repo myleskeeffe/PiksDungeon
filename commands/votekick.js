@@ -221,7 +221,7 @@ module.exports = {
             }
             voteKick();
         }
-        // If all else fails; throw a helpful error.
+        // If all else fails; throw a helpful error. 
         else {
             return (message.reply("I didn't get that. Please check .vk help"))
         }
