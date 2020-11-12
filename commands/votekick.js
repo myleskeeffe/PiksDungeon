@@ -1,5 +1,5 @@
 const { db } = require("../util/db");
-const { BOT_NAME } = require("../config.json")
+const { BOT_NAME, TEST_MODE } = require("../config.json")
 const { MessageEmbed } = require("discord.js");
 const { hasAdminPerms } = require("../util/EvobotUtil")
 
@@ -147,7 +147,12 @@ module.exports = {
                                 message.reply("Vote Kick for " + message.mentioned.members.first().toString() + " Succeeded");
                                 // Delete user's vote key.
                                 await db.del(keyId);
-                                await message.mentioned.members.first().kick("Kicked via Successful Vote Kick. Users who voted: " + voteArray)
+                                if (!TEST_MODE) {
+                                    await message.mentioned.members.first().kick("Kicked via Successful Vote Kick. Users who voted: " + voteArray)
+                                }
+                                else {
+                                    message.channel.send("BOT IS IN TEST MODE. " + message.mentioned.members.first().toString() + " WOULDVE HAVE JUST BEEN KICKED.")
+                                }
                             }
                         }
                     }
@@ -179,12 +184,12 @@ module.exports = {
                                 }
                                 catch (err) {
                                     if (err.notFound) {
-                                        
+
                                     }
                                 }
                             }
                             checkVotes();
-                        }, 5000);
+                        }, 60000);
                     }
                 }
             }

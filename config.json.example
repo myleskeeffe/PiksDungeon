@@ -3,6 +3,9 @@
   "YOUTUBE_API_KEY": "",
   "SOUNDCLOUD_CLIENT_ID": "",
   "MAX_PLAYLIST_SIZE": 10,
-  "PREFIX": "/",
-  "PRUNING": false
+  "PREFIX": ".",
+  "PRUNING": true,
+  "BOT_NAME": "Pik's Dungeon",
+  "BOT_OWNER_ID": 0,
+  "TEST_MODE": false
 }
