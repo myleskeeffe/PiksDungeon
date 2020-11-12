@@ -169,27 +169,27 @@ module.exports = {
                         let voteArrayJSON = await JSON.stringify(voteArray);
                         await db.put(keyId, voteArrayJSON);
                         // Start a timer and then recheck if user has been kicked or not - if not reset user.
-                        setTimeout(function () {
-                            async function checkVotes() {
-                                try {
+                        // setTimeout(function () {
+                        //     async function checkVotes() {
+                        //         try {
 
-                                    // User Votekick still exits, expire it
-                                    let votes = await db.get(keyId);
-                                    if (votes) {
-                                        db.del(keyId);
-                                        message.channel.send("Vote Kick For: " + message.mentions.members.first().toString() + " expired. (120s)");
-                                    }
+                        //             // User Votekick still exits, expire it
+                        //             let votes = await db.get(keyId);
+                        //             if (votes) {
+                        //                 db.del(keyId);
+                        //                 message.channel.send("Vote Kick For: " + message.mentions.members.first().toString() + " expired. (120s)");
+                        //             }
 
 
-                                }
-                                catch (err) {
-                                    if (err.notFound) {
+                        //         }
+                        //         catch (err) {
+                        //             if (err.notFound) {
 
-                                    }
-                                }
-                            }
-                            checkVotes();
-                        }, 60000);
+                        //             }
+                        //         }
+                        //     }
+                        //     checkVotes();
+                        // }, 60000);
                     }
                 }
             }
