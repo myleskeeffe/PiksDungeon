@@ -4,27 +4,10 @@
 const { Client, Collection } = require("discord.js");
 const { readdirSync } = require("fs");
 const { join } = require("path");
+<<<<<<< HEAD
 const { db } = require("./util/db");
 
-// process.on('exit', () => {
-//   db.close();
-//   console.log("Database Closing...");
-// });
-
-// process.on('SIGINT', () => {
-//   db.close();
-//   console.log("Database Closing...");
-// });
-
-let TOKEN, PREFIX;
-try {
-  const config = require("./config.json");
-  TOKEN = config.TOKEN;
-  PREFIX = config.PREFIX;
-} catch (error) {
-  TOKEN = process.env.TOKEN;
-  PREFIX = process.env.PREFIX;
-}
+const { TOKEN, PREFIX } = require("./util/EvobotUtil");
 
 const client = new Client({ disableMentions: "everyone" });
 
