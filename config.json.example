@@ -7,5 +7,7 @@
   "PRUNING": true,
   "BOT_NAME": "Pik's Dungeon",
   "BOT_OWNER_ID": 0,
-  "TEST_MODE": false
+  "TEST_MODE": false,
+  "STAY_TIME": 30,
+  "DEFAULT_VOLUME": 100
 }
