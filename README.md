@@ -1,3 +1,8 @@
+# PiksDungeon has been archived.
+*When I originally forked evobot, I intended to add a couple commands for a couples of friends servers for fun. However, know that we are wanting more functionality, it has become harder to keep adding it to evobot, as evobot was primarily a music button and built for that. So I will instead create a separate management/fun bot, and run Evobot separately (directly built from their source) so that way I avoid command conflicts, and different coding styles. The latest build of this codebase will NOT work, as it needed some more fixes to work with the upstream merges.*
+
+-------------
+
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/eritislami/evobot)
 
 ![logo](https://repository-images.githubusercontent.com/186841818/8aa95700-7730-11e9-84be-e80f28520325)
